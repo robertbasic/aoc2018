@@ -39,4 +39,27 @@ class ChecksumCalculator
 
         return count($twos) * count($threes);
     }
+
+    public function findCommonLetters(array $boxIds): string
+    {
+        $commonLetters = '';
+        array_walk($boxIds, function ($thisBoxId, $index) use ($boxIds, &$commonLetters) {
+            while ($index <= (count($boxIds) - 1)) {
+                $thatBoxId = $boxIds[$index];
+
+                $distance = levenshtein($thisBoxId, $thatBoxId);
+
+                if ($distance === 1) {
+                    $thisBoxId = str_split($thisBoxId);
+                    $thatBoxId = str_split($thatBoxId);
+                    $commonLetters = join('', array_intersect($thisBoxId, $thatBoxId));
+                    return;
+                }
+
+                $index++;
+            }
+        });
+
+        return $commonLetters;
+    }
 }

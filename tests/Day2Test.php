@@ -18,7 +18,7 @@ class Day2Test extends TestCase
 
     /**
      * @test
-     * @dataProvider boxIDs
+     * @dataProvider boxIDsForChecksum
      */
     public function box_checksum_is_calculated(array $boxIds, int $checksum)
     {
@@ -41,7 +41,32 @@ class Day2Test extends TestCase
         $this->assertSame(7105, $resultingChecksum);
     }
 
-    public function boxIDs()
+    /**
+     * @test
+     * @dataProvider boxIDsForCommonLetters
+     */
+    public function common_letters_are_found(array $boxIds, string $commonLetters)
+    {
+        $resultingCommonLetters = $this->checksumCalculator->findCommonLetters($boxIds);
+
+        $this->assertSame($commonLetters, $resultingCommonLetters);
+    }
+
+    /**
+     * @test
+     */
+    public function common_letters_are_found_with_actual_input()
+    {
+        $input = file_get_contents(__DIR__ . '/inputs/day2_1.txt');
+
+        $boxIds = explode("\n", $input);
+
+        $resultingCommonLetters = $this->checksumCalculator->findCommonLetters($boxIds);
+
+        $this->assertSame('omlvgdokxfncvqyersasjziup', $resultingCommonLetters);
+    }
+
+    public function boxIDsForChecksum()
     {
         return [
             [
@@ -55,6 +80,24 @@ class Day2Test extends TestCase
                     'ababab'
                 ],
                 12
+            ]
+        ];
+    }
+
+    public function boxIDsForCommonLetters()
+    {
+        return [
+            [
+                [
+                    'abcde',
+                    'fghij',
+                    'klmno',
+                    'pqrst',
+                    'fguij',
+                    'axcye',
+                    'wvxyz'
+                ],
+                'fgij'
             ]
         ];
     }
